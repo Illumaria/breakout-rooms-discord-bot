@@ -24,7 +24,7 @@ async def on_ready():
     await bot.tree.sync()
 
 
-@bot.hybrid_command(name="ping")
+@bot.hybrid_command(name="breakouts")
 async def breakouts(
     ctx: commands.context.Context,
     duration: int = 60,

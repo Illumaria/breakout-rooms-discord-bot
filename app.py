@@ -6,6 +6,8 @@ from typing import Any
 import discord
 from discord.ext import commands
 
+from src.healthcheck import Healthcheck
+
 DISCORD_TOKEN: str = os.getenv("DISCORD_TOKEN", "")
 
 intents = discord.Intents.default()
@@ -17,6 +19,12 @@ bot = commands.Bot(command_prefix="/", intents=intents)
 async def get_partitions(items: list[Any], n: int) -> list[list[Any]]:
     random.shuffle(items)
     return [items[i::n] for i in range(n)]
+
+
+@bot.event
+async def setup_hook() -> None:
+    healthcheck = Healthcheck(client=bot, port=8080)
+    await healthcheck.start_server()
 
 
 @bot.event
@@ -58,4 +66,5 @@ async def breakouts(
         await channel.delete()
 
 
-bot.run(token=DISCORD_TOKEN)
+if __name__ == "__main__":
+    bot.run(token=DISCORD_TOKEN)

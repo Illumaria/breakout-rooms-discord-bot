@@ -60,7 +60,22 @@ async def breakouts(
     await ctx.reply(
         content=f"Created {len(channels)} breakout rooms for {duration} seconds."
     )
-    await asyncio.sleep(duration)
+
+    message: discord.Message = await ctx.send(
+        f"Breakout rooms will close in {duration} seconds..."
+    )
+    while duration > 0:
+        await asyncio.sleep(1)
+        duration -= 1
+        await message.edit(
+            content=f"Breakout rooms will close in {duration} seconds..."
+        )
+    await message.delete()
+
+    await ctx.send(
+        content=f"Moving everyone back to {main_channel.name} channel.",
+        delete_after=10,
+    )
 
     for member in members:
         await member.move_to(channel=main_channel)

@@ -44,7 +44,7 @@ async def breakouts(
     channels: list[discord.VoiceChannel] = []
     for i in range(groups):
         channel = await guild.create_voice_channel(
-            name=f"Room {i + 1}",
+            name=f"Breakout Room {i + 1}",
             category=main_channel.category,
         )
         channels.append(channel)
@@ -57,6 +57,9 @@ async def breakouts(
         for member in member_group:
             await member.move_to(channel=channels[i])
 
+    await ctx.reply(
+        content=f"Created {len(channels)} breakout rooms for {duration} seconds."
+    )
     await asyncio.sleep(duration)
 
     for member in members:

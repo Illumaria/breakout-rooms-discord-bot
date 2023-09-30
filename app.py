@@ -49,7 +49,11 @@ async def breakouts(
         )
         channels.append(channel)
 
-    members: list[discord.Member] = main_channel.members
+    members: list[discord.Member] = [
+        member
+        for member in main_channel.members
+        if member.name not in ("svetlana.teacher.dc_10765",)
+    ]
     member_groups: list[list[discord.Member]] = await get_partitions(
         items=members, n=groups
     )
